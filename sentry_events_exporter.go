@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+        "os"
 	"os/exec"
 )
 
@@ -33,13 +33,13 @@ func usage() {
 
 func main() {
 	token := flag.String("token", "", "token for Sentry API")
-	if *token == "" {
-		usage()
-		os.Exit(2)
-	}
 	url := flag.String("url", "http://localhost", "Sentry url")
 	hoursAgo := flag.String("hours", "1", "how many hours to look back for events")
 	flag.Parse()
+	if *token == "" {
+                usage()
+                os.Exit(2)
+        }
 	myFilesHandler := &OptsHandler{Token: *token, URL: *url, Hours: *hoursAgo}
 	http.HandleFunc("/metrics", myFilesHandler.handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
