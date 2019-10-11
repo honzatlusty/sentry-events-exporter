@@ -42,7 +42,7 @@ func main() {
         }
 	myFilesHandler := &OptsHandler{Token: *token, URL: *url, Hours: *hoursAgo}
 	http.HandleFunc("/metrics", myFilesHandler.handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":9392", nil))
 
 }
 
