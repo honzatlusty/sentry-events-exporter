@@ -11,8 +11,9 @@ for organization in $organizations; do
   projects=$(curl --silent -H "Authorization: Bearer ${token}" "${sentry_url}/api/0/organizations/${organization}/projects/" | jq .[].slug -r)
   for project in $projects; do
     events=$(curl --silent -H "Authorization: Bearer ${token}" "${sentry_url}/api/0/projects/${organization}/${project}/stats/?&since=${timestamp}&until=${timestamp_now}" | jq .[][1] | awk '{s+=$1} END {print s}')
-    echo "# HELP sentry_events_received_per_hour_${project} /api/0/projects/${organization}/${project}/stats/?&since=${timestamp}&until=${timestamp_now}
-# TYPE sentry_events_received_per_hour_${project} gauge
-sentry_events_received_per_hour_${project} ${events}"
+    project_sanitized=$(echo $project | tr ' -.' '_')
+    echo "# HELP sentry_events_received_per_hour_${project_sanitized} /api/0/projects/${organization}/${project_sanitized}/stats/?&since=${timestamp}&until=${timestamp_now}
+# TYPE sentry_events_received_per_hour_${project_sanitized} gauge
+sentry_events_received_per_hour_${project_sanitized} ${events}"
   done
 done
